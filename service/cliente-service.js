@@ -5,10 +5,24 @@ const listaClientes = () => {        // Faz conexão com a API
     })
 }  
 
-export const clienteService = {
-    listaClientes
+const criaCliente = (nome, email) => {
+    return fetch(`http://localhost:3000/profile`, {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify ({
+            nome: nome,
+            email: email
+        })
+    })
+    .then(resposta => {
+        return resposta.body
+    })
+
 }
 
-//const data = JSON.parse(http.response)
-//            data.forEach(elemento => {
-//                tabela.appendChild(criaNovaLinha(elemento.nome, elemento.email))
+export const clienteService = {
+    listaClientes,
+    criaCliente
+}
