@@ -17,21 +17,20 @@ const criaNovaLinha = (nome, email, id) => {  // Cria um template
 }
 
 const tabela = document.querySelector('[data-tabela]')  // Percorre o dom e encontra o corpo da tabela
-tabela.addEventListener('click', (evento) => {
+tabela.addEventListener('click', async (evento) => {
     let eHBotaoDeletar = evento.target.className === 'botao-simples botao-simples--excluir'
     if (eHBotaoDeletar) {
         const linhaCliente = evento.target.closest('[data-id]')
         let id = linhaCliente.dataset.id
-        clienteService.removeCliente(id)
-        .then( ()=> {
+        await clienteService.removeCliente(id)
             linhaCliente.remove()
-        })
     }
 })
 
-
-clienteService.listaClientes()     // Pega os dados da API, faz o looping interando sobre os dados e exibindo na tela
-.then( data => {
-    data.forEach(elemento => {
-    tabela.appendChild(criaNovaLinha(elemento.nome, elemento.email, elemento.id))
-    })})
+const render = async () => {
+    const listaClientes = await clienteService.listaClientes()     // Pega os dados da API, faz o looping interando sobre os dados e exibindo na tela
+        listaClientes.forEach(elemento => {
+        tabela.appendChild(criaNovaLinha(elemento.nome, elemento.email, elemento.id))
+        })
+}
+render()
