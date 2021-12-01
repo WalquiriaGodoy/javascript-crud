@@ -20,17 +20,29 @@ const tabela = document.querySelector('[data-tabela]')  // Percorre o dom e enco
 tabela.addEventListener('click', async (evento) => {
     let eHBotaoDeletar = evento.target.className === 'botao-simples botao-simples--excluir'
     if (eHBotaoDeletar) {
+        try{
         const linhaCliente = evento.target.closest('[data-id]')
         let id = linhaCliente.dataset.id
         await clienteService.removeCliente(id)
             linhaCliente.remove()
+        }
+        catch(erro){
+            console.log(erro)
+            window.location.href = '../telas/erro.html'
+        }
     }
 })
 
 const render = async () => {
-    const listaClientes = await clienteService.listaClientes()     // Pega os dados da API, faz o looping interando sobre os dados e exibindo na tela
-        listaClientes.forEach(elemento => {
-        tabela.appendChild(criaNovaLinha(elemento.nome, elemento.email, elemento.id))
+    try{
+        const listaClientes = await clienteService.listaClientes()     // Pega os dados da API, faz o looping interando sobre os dados e exibindo na tela
+            listaClientes.forEach(elemento => {
+            tabela.appendChild(criaNovaLinha(elemento.nome, elemento.email, elemento.id))
         })
+    }
+    catch(erro){
+        console.log(erro)
+        window.location.href = '../telas/erro.html'
+    }
 }
 render()
